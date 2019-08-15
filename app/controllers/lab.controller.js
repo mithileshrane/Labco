@@ -1,4 +1,5 @@
 const Lab = require('../models/lab.model.js');
+const User = require('../models/lab.user.js');
 
     // Create and Save a new Note
     exports.create = (req, res) => {
@@ -14,11 +15,28 @@ const Lab = require('../models/lab.model.js');
     // Create a Note
     const lab = new Lab({
         title: req.body.title, 
-        content: req.body.content  || "Lab Details"
+        content: req.body.content  || "null",
+        time: req.body.time  || "null",
+        specialization: req.body.specialization  || "null"
     });
 
     // Save Note in the database
     lab.save()
+
+
+    //  // Create a Note
+    //  const user = new User({
+    //     fname:"Mithilesh", 
+    //     lname: "Rane",
+    //     passwd: "hello",
+    //     designation: "SE",
+    //     emailId: "mithrane@hello.com",
+    //     username: "mithrane",
+    //     type: 1,
+    // });
+
+    // // Save Note in the database
+    // user.save()
     .then(data => {
         res.send(data);
     }).catch(err => {

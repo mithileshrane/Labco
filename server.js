@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
 
+
+var usersRouter = require('./app/routes/users');
+
 // create express app
 const app = express();
 
@@ -15,10 +18,24 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse requests of content-type - application/json
 app.use(bodyParser.json())
 
+//Routes
+app.use('/users', usersRouter);
+
+
+var cookieParser = require('cookie-parser');
+var path = require('path')
+var createError = require('http-errors');
+var logger = require('morgan');
+
+
 // Require Notes routes
 require('./app/routes/lab.routes.js')(app);
 
+// view engine setup
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 mongoose.Promise = global.Promise;
 
@@ -34,8 +51,11 @@ mongoose.connect(dbConfig.url, {
 
 // define a simple route
 app.get('/', (req, res) => {
-    res.json({"message": "Welcome to EasyLab application. Take Labs quickly. Organize and keep track of all your Labs."});
+    // res.json({"message": "Welcome to EasyLab application. Take Labs quickly. Organize and keep track of all your Labs."});
+    res.render('index', { error: false });
 });
+
+
 
 // listen for requests
 app.listen(3000, () => {
